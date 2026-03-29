@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Girika's Job Tracker</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F5F2EC;
+    --surface: #FDFBF7;
+    --ink: #1A1814;
+    --ink2: #6B6760;
+    --ink3: #9E9B96;
+    --border: #E2DED6;
+    --accent: #C8521A;
+    --accent-light: #F5EAE3;
+    --green: #2D6A4F;
+    --green-light: #E8F5EE;
+    --amber: #92600A;
+    --amber-light: #FBF3E2;
+    --blue: #1A4D7C;
+    --blue-light: #E5EFF8;
+    --red: #8B1A1A;
+    --red-light: #F8E5E5;
+    --gray-light: #F0EDE8;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    min-height: 100vh;
+  }
+
+  /* Header */
+  .page-header {
+    background: var(--ink);
+    padding: 2.5rem 3rem 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .page-header::after {
+    content: '';
+    position: absolute;
+    right: -60px; top: -60px;
+    width: 280px; height: 280px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+  .page-header::before {
+    content: '';
+    position: absolute;
+    right: 40px; top: 20px;
+    width: 140px; height: 140px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+  .header-eyebrow {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+  }
+  .header-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2.6rem;
+    color: #FDFBF7;
+    line-height: 1.1;
+    margin-bottom: 0.4rem;
+  }
+  .header-sub {
+    font-size: 14px;
+    color: rgba(255,255,255,0.45);
+    font-weight: 300;
+  }
+  .header-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 1.8rem;
+    flex-wrap: wrap;
+  }
+  .btn {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 9px 18px;
+    border-radius: 6px;
+    cursor: pointer;
+    border: none;
+    transition: all 0.15s;
+  }
+  .btn-light {
+    background: rgba(255,255,255,0.1);
+    color: #FDFBF7;
+    border: 1px solid rgba(255,255,255,0.15);
+  }
+  .btn-light:hover { background: rgba(255,255,255,0.16); }
+  .btn-accent {
+    background: var(--accent);
+    color: #fff;
+  }
+  .btn-accent:hover { background: #B04516; }
+  .btn-ghost {
+    background: transparent;
+    color: var(--ink2);
+    border: 1px solid var(--border);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    padding: 5px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.12s;
+  }
+  .btn-ghost:hover { background: var(--gray-light); }
+  .btn-danger {
+    background: transparent;
+    color: var(--red);
+    border: 1px solid #F0C4C4;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    padding: 5px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.12s;
+  }
+  .btn-danger:hover { background: var(--red-light); }
+
+  /* Stats */
+  .stats-bar {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 1.2rem 3rem;
+    display: flex;
+    gap: 2.5rem;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .stats-group { display: flex; gap: 2rem; flex-wrap: wrap; }
+  .stat-item { text-align: center; }
+  .stat-num {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.8rem;
+    color: var(--ink);
+    line-height: 1;
+  }
+  .stat-label {
+    font-size: 11px;
+    color: var(--ink3);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+  .stat-divider {
+    width: 1px;
+    height: 36px;
+    background: var(--border);
+    align-self: center;
+  }
+
+  /* Toolbar */
+  .toolbar {
+    padding: 1rem 3rem;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+  }
+  .search-wrap {
+    position: relative;
+    flex: 1;
+    min-width: 180px;
+    max-width: 320px;
+  }
+  .search-wrap input {
+    width: 100%;
+    padding: 8px 12px 8px 34px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--surface);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    color: var(--ink);
+    outline: none;
+    transition: border 0.15s;
+  }
+  .search-wrap input:focus { border-color: var(--ink3); }
+  .search-wrap::before {
+    content: '⌕';
+    position: absolute;
+    left: 10px; top: 50%;
+    transform: translateY(-50%);
+    font-size: 16px;
+    color: var(--ink3);
+    pointer-events: none;
+  }
+  .filter-select {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    padding: 8px 12px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--surface);
+    color: var(--ink);
+    outline: none;
+    cursor: pointer;
+  }
+  .last-sync {
+    font-size: 12px;
+    color: var(--ink3);
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .sync-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--green);
+  }
+
+  /* Table */
+  .table-wrap {
+    padding: 1.5rem 3rem 3rem;
+    overflow-x: auto;
+  }
+  table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    min-width: 900px;
+  }
+  thead tr {
+    background: var(--gray-light);
+  }
+  th {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--ink3);
+    padding: 11px 16px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+  td {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    font-size: 13.5px;
+    color: var(--ink);
+    vertical-align: middle;
+  }
+  tr:last-child td { border-bottom: none; }
+  tbody tr { transition: background 0.1s; }
+  tbody tr:hover td { background: #F9F7F2; }
+  .org-name { font-weight: 500; }
+  .muted { color: var(--ink3); font-size: 13px; }
+  .site-pill {
+    display: inline-block;
+    background: var(--gray-light);
+    color: var(--ink2);
+    font-size: 11px;
+    padding: 3px 9px;
+    border-radius: 99px;
+    white-space: nowrap;
+  }
+  .badge {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 500;
+    padding: 3px 10px;
+    border-radius: 99px;
+    white-space: nowrap;
+  }
+  .b-applied { background: var(--blue-light); color: var(--blue); }
+  .b-interview { background: var(--amber-light); color: var(--amber); }
+  .b-offer { background: var(--green-light); color: var(--green); }
+  .b-rejected { background: var(--red-light); color: var(--red); }
+  .b-noresponse { background: var(--gray-light); color: var(--ink2); }
+  .b-ghosted { background: var(--gray-light); color: var(--ink3); }
+  .row-actions { display: flex; gap: 6px; }
+  .no-results {
+    text-align: center;
+    padding: 3rem;
+    color: var(--ink3);
+    font-size: 14px;
+  }
+  .sno { color: var(--ink3); font-size: 12px; font-variant-numeric: tabular-nums; }
+
+  /* Modal */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(26,24,20,0.55);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: var(--surface);
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    padding: 1.8rem;
+    width: 560px;
+    max-width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+  .modal h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.4rem;
+    margin-bottom: 1.2rem;
+    color: var(--ink);
+  }
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .form-field { display: flex; flex-direction: column; gap: 5px; }
+  .form-field.full { grid-column: 1/-1; }
+  .form-field label { font-size: 12px; color: var(--ink2); font-weight: 500; }
+  .form-field input, .form-field select {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    padding: 9px 11px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--bg);
+    color: var(--ink);
+    outline: none;
+    transition: border 0.15s;
+  }
+  .form-field input:focus, .form-field select:focus { border-color: var(--ink3); }
+  .modal-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 1.2rem; }
+
+  /* Toast */
+  .toast {
+    position: fixed;
+    bottom: 2rem; right: 2rem;
+    background: var(--ink);
+    color: #FDFBF7;
+    font-size: 13px;
+    padding: 10px 18px;
+    border-radius: 6px;
+    z-index: 999;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.25s;
+    pointer-events: none;
+  }
+  .toast.show { opacity: 1; transform: translateY(0); }
+
+  @media (max-width: 700px) {
+    .page-header, .stats-bar, .toolbar, .table-wrap { padding-left: 1.2rem; padding-right: 1.2rem; }
+    .header-title { font-size: 2rem; }
+    .form-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="header-eyebrow">Job Search 2026</div>
+  <div class="header-title">Girika's Applications</div>
+  <div class="header-sub">Tracking every opportunity — synced from Gmail</div>
+  <div class="header-actions">
+    <button class="btn btn-accent" onclick="openAdd()">+ Add Application</button>
+    <button class="btn btn-light" onclick="exportCSV()">↓ Export CSV</button>
+  </div>
+</div>
+
+<div class="stats-bar">
+  <div class="stats-group">
+    <div class="stat-item">
+      <div class="stat-num" id="s-total">0</div>
+      <div class="stat-label">Total</div>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat-item">
+      <div class="stat-num" id="s-linkedin">0</div>
+      <div class="stat-label">LinkedIn</div>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat-item">
+      <div class="stat-num" id="s-naukri">0</div>
+      <div class="stat-label">Naukri</div>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat-item">
+      <div class="stat-num" id="s-interview">0</div>
+      <div class="stat-label">Interviews</div>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat-item">
+      <div class="stat-num" id="s-offer">0</div>
+      <div class="stat-label">Offers</div>
+    </div>
+  </div>
+  <div style="font-size:12px;color:var(--ink3);">Last synced: 28 Mar 2026</div>
+</div>
+
+<div class="toolbar">
+  <div class="search-wrap">
+    <input type="text" id="search-input" placeholder="Search company, role, location…" oninput="renderTable()">
+  </div>
+  <select class="filter-select" id="filter-resp" onchange="renderTable()">
+    <option value="">All responses</option>
+    <option>Applied</option>
+    <option>Interview</option>
+    <option>Offer</option>
+    <option>Rejected</option>
+    <option>No response</option>
+    <option>Ghosted</option>
+  </select>
+  <select class="filter-select" id="filter-site" onchange="renderTable()">
+    <option value="">All sites</option>
+    <option>LinkedIn</option>
+    <option>Naukri</option>
+    <option>Company website</option>
+  </select>
+</div>
+
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th>S.No</th>
+        <th>Organization</th>
+        <th>Role</th>
+        <th>Location</th>
+        <th>Applied via</th>
+        <th>Response</th>
+        <th>Salary</th>
+        <th>Working days</th>
+        <th>Date</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody id="tbl-body"></tbody>
+  </table>
+</div>
+
+<!-- Modal -->
+<div class="modal-overlay" id="modal-overlay" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <h2 id="modal-title">Add Application</h2>
+    <div class="form-grid">
+      <div class="form-field"><label>Organization *</label><input id="f-org" type="text" placeholder="e.g. Google"></div>
+      <div class="form-field"><label>Role *</label><input id="f-role" type="text" placeholder="e.g. Program Manager"></div>
+      <div class="form-field"><label>Location</label><input id="f-loc" type="text" placeholder="e.g. Delhi / Remote"></div>
+      <div class="form-field"><label>Applied via</label><input id="f-site" type="text" placeholder="e.g. LinkedIn, Naukri"></div>
+      <div class="form-field"><label>Response</label>
+        <select id="f-resp">
+          <option>Applied</option><option>Interview</option><option>Offer</option>
+          <option>Rejected</option><option>No response</option><option>Ghosted</option>
+        </select>
+      </div>
+      <div class="form-field"><label>Salary</label><input id="f-sal" type="text" placeholder="e.g. 12 LPA"></div>
+      <div class="form-field"><label>Working days</label><input id="f-days" type="text" placeholder="e.g. 5 days / Mon–Fri"></div>
+      <div class="form-field"><label>Date applied</label><input id="f-date" type="date"></div>
+      <div class="form-field full"><label>Notes</label><input id="f-notes" type="text" placeholder="Any extra info…"></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-accent" onclick="saveEntry()">Save</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const INITIAL_DATA = [
+  { id:1, org:'ROI - Return On Ideas', role:'Operations Manager', loc:'Hauz Khas, Delhi', site:'LinkedIn', resp:'Applied', sal:'', days:'', date:'2026-03-28', notes:'' },
+  { id:2, org:'Geanis World & MICE', role:'Asst Manager - Contracting & Ops (Domestic MICE)', loc:'New Delhi', site:'LinkedIn', resp:'Applied', sal:'', days:'', date:'2026-03-28', notes:'' },
+  { id:3, org:'Extento Experiences', role:'Production Manager', loc:'Delhi', site:'LinkedIn', resp:'Applied', sal:'', days:'', date:'2026-03-28', notes:'' },
+  { id:4, org:'Apollo Cradle', role:'Operations Manager', loc:'New Delhi (Chirag Enclave)', site:'Naukri', resp:'Applied', sal:'', days:'', date:'2026-03-27', notes:'' },
+  { id:5, org:'Tata Consultancy Services', role:'Project Manager', loc:'Delhi', site:'LinkedIn', resp:'Applied', sal:'', days:'', date:'2026-03-27', notes:'' },
+  { id:6, org:'Maker Lab', role:'Project Manager (Localisation & Events)', loc:'Gurugram', site:'LinkedIn', resp:'Applied', sal:'', days:'', date:'2026-03-27', notes:'' },
+  { id:7, org:'24x7Table', role:'Business Development Manager', loc:'', site:'Company website', resp:'Applied', sal:'', days:'', date:'2026-03-27', notes:'' },
+  { id:8, org:'Cvent', role:'Express Monitoring & Speaker Training Consultant', loc:'Tysons, VA (USA)', site:'Company website', resp:'Applied', sal:'', days:'', date:'2026-03-27', notes:'' },
+  { id:9, org:'AccorHotel', role:'Cluster Learning and Development Manager', loc:'', site:'SmartRecruiters', resp:'Applied', sal:'', days:'', date:'2026-03-27', notes:'' },
+  { id:10, org:'International SOS', role:'Learning & Development (L&D) Specialist', loc:'', site:'Company website', resp:'Applied', sal:'', days:'', date:'2026-03-26', notes:'' },
+  { id:11, org:'CHANEL', role:'Assistant Manager - Fashion Marketing', loc:'Delhi', site:'LinkedIn', resp:'Applied', sal:'', days:'', date:'2026-03-26', notes:'' },
+  { id:12, org:'Inc42 Media', role:'Program Manager - Operations', loc:'', site:'Company website', resp:'Applied', sal:'', days:'', date:'2026-03-26', notes:'' },
+];
+
+const BADGE_CLASS = {
+  'Applied':'b-applied','Interview':'b-interview','Offer':'b-offer',
+  'Rejected':'b-rejected','No response':'b-noresponse','Ghosted':'b-ghosted'
+};
+
+let apps = [];
+let editId = null;
+
+function loadApps() {
+  try {
+    const saved = localStorage.getItem('girika_job_apps');
+    if (saved) {
+      apps = JSON.parse(saved);
+    } else {
+      apps = INITIAL_DATA.map(a => ({...a}));
+      saveApps();
+    }
+  } catch(e) { apps = INITIAL_DATA.map(a => ({...a})); }
+}
+
+function saveApps() {
+  try { localStorage.setItem('girika_job_apps', JSON.stringify(apps)); } catch(e) {}
+}
+
+function renderStats() {
+  document.getElementById('s-total').textContent = apps.length;
+  document.getElementById('s-linkedin').textContent = apps.filter(a => a.site && a.site.toLowerCase().includes('linkedin')).length;
+  document.getElementById('s-naukri').textContent = apps.filter(a => a.site && a.site.toLowerCase().includes('naukri')).length;
+  document.getElementById('s-interview').textContent = apps.filter(a => a.resp === 'Interview').length;
+  document.getElementById('s-offer').textContent = apps.filter(a => a.resp === 'Offer').length;
+}
+
+function renderTable() {
+  const q = document.getElementById('search-input').value.toLowerCase();
+  const filterResp = document.getElementById('filter-resp').value;
+  const filterSite = document.getElementById('filter-site').value;
+
+  let filtered = [...apps].sort((a,b) => (b.date||'').localeCompare(a.date||''));
+
+  if (q) filtered = filtered.filter(a =>
+    [a.org, a.role, a.loc, a.site, a.notes].some(f => (f||'').toLowerCase().includes(q))
+  );
+  if (filterResp) filtered = filtered.filter(a => a.resp === filterResp);
+  if (filterSite) filtered = filtered.filter(a => (a.site||'').toLowerCase().includes(filterSite.toLowerCase()));
+
+  const tbody = document.getElementById('tbl-body');
+  if (!filtered.length) {
+    tbody.innerHTML = '<tr><td colspan="10" class="no-results">No applications match your filters.</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = filtered.map((a, i) => `
+    <tr>
+      <td class="sno">${i+1}</td>
+      <td class="org-name">${esc(a.org)}</td>
+      <td>${esc(a.role)}</td>
+      <td class="${a.loc ? '' : 'muted'}">${esc(a.loc || '—')}</td>
+      <td><span class="site-pill">${esc(a.site || '—')}</span></td>
+      <td><span class="badge ${BADGE_CLASS[a.resp] || 'b-applied'}">${esc(a.resp)}</span></td>
+      <td class="${a.sal ? '' : 'muted'}">${esc(a.sal || '—')}</td>
+      <td class="${a.days ? '' : 'muted'}">${esc(a.days || '—')}</td>
+      <td class="muted">${formatDate(a.date)}</td>
+      <td>
+        <div class="row-actions">
+          <button class="btn-ghost" onclick="openEdit(${a.id})">Edit</button>
+          <button class="btn-danger" onclick="deleteEntry(${a.id})">Delete</button>
+        </div>
+      </td>
+    </tr>
+  `).join('');
+
+  renderStats();
+}
+
+function formatDate(d) {
+  if (!d) return '—';
+  try {
+    const dt = new Date(d + 'T00:00:00');
+    return dt.toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' });
+  } catch(e) { return d; }
+}
+
+function esc(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function openAdd() {
+  editId = null;
+  document.getElementById('modal-title').textContent = 'Add Application';
+  ['org','role','loc','site','sal','days','notes'].forEach(f => document.getElementById('f-'+f).value = '');
+  document.getElementById('f-resp').value = 'Applied';
+  document.getElementById('f-date').value = new Date().toISOString().slice(0,10);
+  document.getElementById('modal-overlay').classList.add('open');
+}
+
+function openEdit(id) {
+  const a = apps.find(x => x.id === id);
+  if (!a) return;
+  editId = id;
+  document.getElementById('modal-title').textContent = 'Edit Application';
+  document.getElementById('f-org').value = a.org || '';
+  document.getElementById('f-role').value = a.role || '';
+  document.getElementById('f-loc').value = a.loc || '';
+  document.getElementById('f-site').value = a.site || '';
+  document.getElementById('f-resp').value = a.resp || 'Applied';
+  document.getElementById('f-sal').value = a.sal || '';
+  document.getElementById('f-days').value = a.days || '';
+  document.getElementById('f-date').value = a.date || '';
+  document.getElementById('f-notes').value = a.notes || '';
+  document.getElementById('modal-overlay').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('open');
+}
+
+function saveEntry() {
+  const org = document.getElementById('f-org').value.trim();
+  const role = document.getElementById('f-role').value.trim();
+  if (!org || !role) { alert('Organization and Role are required.'); return; }
+  const entry = {
+    id: editId || Date.now(),
+    org, role,
+    loc: document.getElementById('f-loc').value.trim(),
+    site: document.getElementById('f-site').value.trim(),
+    resp: document.getElementById('f-resp').value,
+    sal: document.getElementById('f-sal').value.trim(),
+    days: document.getElementById('f-days').value.trim(),
+    date: document.getElementById('f-date').value,
+    notes: document.getElementById('f-notes').value.trim()
+  };
+  if (editId) {
+    apps = apps.map(a => a.id === editId ? entry : a);
+    showToast('Entry updated');
+  } else {
+    apps.push(entry);
+    showToast('Application added');
+  }
+  saveApps();
+  renderTable();
+  closeModal();
+}
+
+function deleteEntry(id) {
+  if (!confirm('Delete this application?')) return;
+  apps = apps.filter(a => a.id !== id);
+  saveApps();
+  renderTable();
+  showToast('Deleted');
+}
+
+function exportCSV() {
+  const headers = ['S.No','Organization','Role','Location','Applied via','Response','Salary','Working days','Date','Notes'];
+  const rows = [...apps].sort((a,b) => (b.date||'').localeCompare(a.date||'')).map((a,i) => [
+    i+1, a.org, a.role, a.loc, a.site, a.resp, a.sal, a.days, a.date, a.notes
+  ].map(v => `"${String(v||'').replace(/"/g,'""')}"`).join(','));
+  const csv = [headers.join(','), ...rows].join('\n');
+  const blob = new Blob([csv], { type: 'text/csv' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'job_applications.csv';
+  a.click(); URL.revokeObjectURL(url);
+  showToast('CSV downloaded');
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+loadApps();
+renderTable();
+</script>
+</body>
+</html>
