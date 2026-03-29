@@ -4,671 +4,1034 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Girika's Job Tracker</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Instrument+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #F5F2EC;
-    --surface: #FDFBF7;
-    --ink: #1A1814;
-    --ink2: #6B6760;
-    --ink3: #9E9B96;
-    --border: #E2DED6;
-    --accent: #C8521A;
-    --accent-light: #F5EAE3;
-    --green: #2D6A4F;
-    --green-light: #E8F5EE;
-    --amber: #92600A;
-    --amber-light: #FBF3E2;
-    --blue: #1A4D7C;
-    --blue-light: #E5EFF8;
-    --red: #8B1A1A;
-    --red-light: #F8E5E5;
-    --gray-light: #F0EDE8;
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    font-family: 'DM Sans', sans-serif;
-    background: var(--bg);
-    color: var(--ink);
-    min-height: 100vh;
-  }
+:root {
+  --bg: #0E0E0F;
+  --surface: #161618;
+  --surface2: #1E1E21;
+  --border: #2A2A2E;
+  --border2: #333338;
+  --ink: #F0EDE8;
+  --ink2: #9A9893;
+  --ink3: #5A5856;
+  --accent: #E8A87C;
+  --accent-dark: #C4733A;
+  --green: #6FCF97;
+  --green-bg: #0F2318;
+  --amber: #F2C94C;
+  --amber-bg: #231B08;
+  --blue: #56B4E9;
+  --blue-bg: #081620;
+  --red: #EB5757;
+  --red-bg: #200D0D;
+  --gray-bg: #1A1A1C;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Instrument Sans', sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  min-height: 100vh;
+}
 
-  /* Header */
-  .page-header {
-    background: var(--ink);
-    padding: 2.5rem 3rem 2rem;
-    position: relative;
-    overflow: hidden;
-  }
-  .page-header::after {
-    content: '';
-    position: absolute;
-    right: -60px; top: -60px;
-    width: 280px; height: 280px;
-    border-radius: 50%;
-    border: 1px solid rgba(255,255,255,0.06);
-  }
-  .page-header::before {
-    content: '';
-    position: absolute;
-    right: 40px; top: 20px;
-    width: 140px; height: 140px;
-    border-radius: 50%;
-    border: 1px solid rgba(255,255,255,0.08);
-  }
-  .header-eyebrow {
-    font-size: 11px;
-    font-weight: 500;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--accent);
-    margin-bottom: 0.5rem;
-  }
-  .header-title {
-    font-family: 'DM Serif Display', serif;
-    font-size: 2.6rem;
-    color: #FDFBF7;
-    line-height: 1.1;
-    margin-bottom: 0.4rem;
-  }
-  .header-sub {
-    font-size: 14px;
-    color: rgba(255,255,255,0.45);
-    font-weight: 300;
-  }
-  .header-actions {
-    display: flex;
-    gap: 10px;
-    margin-top: 1.8rem;
-    flex-wrap: wrap;
-  }
-  .btn {
-    font-family: 'DM Sans', sans-serif;
-    font-size: 13px;
-    font-weight: 500;
-    padding: 9px 18px;
-    border-radius: 6px;
-    cursor: pointer;
-    border: none;
-    transition: all 0.15s;
-  }
-  .btn-light {
-    background: rgba(255,255,255,0.1);
-    color: #FDFBF7;
-    border: 1px solid rgba(255,255,255,0.15);
-  }
-  .btn-light:hover { background: rgba(255,255,255,0.16); }
-  .btn-accent {
-    background: var(--accent);
-    color: #fff;
-  }
-  .btn-accent:hover { background: #B04516; }
-  .btn-ghost {
-    background: transparent;
-    color: var(--ink2);
-    border: 1px solid var(--border);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 12px;
-    padding: 5px 12px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: all 0.12s;
-  }
-  .btn-ghost:hover { background: var(--gray-light); }
-  .btn-danger {
-    background: transparent;
-    color: var(--red);
-    border: 1px solid #F0C4C4;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 12px;
-    padding: 5px 12px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: all 0.12s;
-  }
-  .btn-danger:hover { background: var(--red-light); }
+/* ── SETUP SCREEN ── */
+#setup-screen {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background: var(--bg);
+}
+.setup-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 2.5rem;
+  width: 480px;
+  max-width: 100%;
+}
+.setup-logo {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.6rem;
+  color: var(--accent);
+  margin-bottom: 0.3rem;
+}
+.setup-sub {
+  font-size: 13px;
+  color: var(--ink2);
+  margin-bottom: 2rem;
+  line-height: 1.6;
+}
+.setup-step {
+  margin-bottom: 1.4rem;
+}
+.setup-step label {
+  display: block;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ink2);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.setup-step input {
+  width: 100%;
+  padding: 10px 13px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--ink);
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 13px;
+  outline: none;
+  transition: border 0.15s;
+}
+.setup-step input:focus { border-color: var(--accent); }
+.setup-step input::placeholder { color: var(--ink3); }
+.setup-hint {
+  font-size: 11px;
+  color: var(--ink3);
+  margin-top: 5px;
+  line-height: 1.5;
+}
+.setup-hint a { color: var(--accent); text-decoration: none; }
+.btn-setup {
+  width: 100%;
+  padding: 12px;
+  background: var(--accent);
+  color: #1A0E06;
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 0.5rem;
+  transition: background 0.15s;
+}
+.btn-setup:hover { background: #F0B88C; }
+.setup-warning {
+  background: var(--amber-bg);
+  border: 1px solid #3A2E08;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 12px;
+  color: var(--amber);
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+}
 
-  /* Stats */
-  .stats-bar {
-    background: var(--surface);
-    border-bottom: 1px solid var(--border);
-    padding: 1.2rem 3rem;
-    display: flex;
-    gap: 2.5rem;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-  }
-  .stats-group { display: flex; gap: 2rem; flex-wrap: wrap; }
-  .stat-item { text-align: center; }
-  .stat-num {
-    font-family: 'DM Serif Display', serif;
-    font-size: 1.8rem;
-    color: var(--ink);
-    line-height: 1;
-  }
-  .stat-label {
-    font-size: 11px;
-    color: var(--ink3);
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    margin-top: 2px;
-  }
-  .stat-divider {
-    width: 1px;
-    height: 36px;
-    background: var(--border);
-    align-self: center;
-  }
+/* ── MAIN APP ── */
+#app { display: none; }
 
-  /* Toolbar */
-  .toolbar {
-    padding: 1rem 3rem;
-    display: flex;
-    gap: 10px;
-    align-items: center;
-    flex-wrap: wrap;
-    background: var(--bg);
-    border-bottom: 1px solid var(--border);
-  }
-  .search-wrap {
-    position: relative;
-    flex: 1;
-    min-width: 180px;
-    max-width: 320px;
-  }
-  .search-wrap input {
-    width: 100%;
-    padding: 8px 12px 8px 34px;
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    background: var(--surface);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 13px;
-    color: var(--ink);
-    outline: none;
-    transition: border 0.15s;
-  }
-  .search-wrap input:focus { border-color: var(--ink3); }
-  .search-wrap::before {
-    content: '⌕';
-    position: absolute;
-    left: 10px; top: 50%;
-    transform: translateY(-50%);
-    font-size: 16px;
-    color: var(--ink3);
-    pointer-events: none;
-  }
-  .filter-select {
-    font-family: 'DM Sans', sans-serif;
-    font-size: 13px;
-    padding: 8px 12px;
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    background: var(--surface);
-    color: var(--ink);
-    outline: none;
-    cursor: pointer;
-  }
-  .last-sync {
-    font-size: 12px;
-    color: var(--ink3);
-    margin-left: auto;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-  .sync-dot {
-    width: 7px; height: 7px;
-    border-radius: 50%;
-    background: var(--green);
-  }
+/* Header */
+.app-header {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 1.2rem 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+.app-brand {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.3rem;
+  color: var(--accent);
+}
+.app-brand span {
+  font-style: italic;
+  font-size: 1rem;
+  color: var(--ink2);
+  margin-left: 6px;
+}
+.header-right { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
 
-  /* Table */
-  .table-wrap {
-    padding: 1.5rem 3rem 3rem;
-    overflow-x: auto;
-  }
-  table {
-    width: 100%;
-    border-collapse: separate;
-    border-spacing: 0;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    overflow: hidden;
-    min-width: 900px;
-  }
-  thead tr {
-    background: var(--gray-light);
-  }
-  th {
-    font-size: 11px;
-    font-weight: 500;
-    letter-spacing: 0.07em;
-    text-transform: uppercase;
-    color: var(--ink3);
-    padding: 11px 16px;
-    text-align: left;
-    border-bottom: 1px solid var(--border);
-    white-space: nowrap;
-  }
-  td {
-    padding: 12px 16px;
-    border-bottom: 1px solid var(--border);
-    font-size: 13.5px;
-    color: var(--ink);
-    vertical-align: middle;
-  }
-  tr:last-child td { border-bottom: none; }
-  tbody tr { transition: background 0.1s; }
-  tbody tr:hover td { background: #F9F7F2; }
-  .org-name { font-weight: 500; }
-  .muted { color: var(--ink3); font-size: 13px; }
-  .site-pill {
-    display: inline-block;
-    background: var(--gray-light);
-    color: var(--ink2);
-    font-size: 11px;
-    padding: 3px 9px;
-    border-radius: 99px;
-    white-space: nowrap;
-  }
-  .badge {
-    display: inline-block;
-    font-size: 11px;
-    font-weight: 500;
-    padding: 3px 10px;
-    border-radius: 99px;
-    white-space: nowrap;
-  }
-  .b-applied { background: var(--blue-light); color: var(--blue); }
-  .b-interview { background: var(--amber-light); color: var(--amber); }
-  .b-offer { background: var(--green-light); color: var(--green); }
-  .b-rejected { background: var(--red-light); color: var(--red); }
-  .b-noresponse { background: var(--gray-light); color: var(--ink2); }
-  .b-ghosted { background: var(--gray-light); color: var(--ink3); }
-  .row-actions { display: flex; gap: 6px; }
-  .no-results {
-    text-align: center;
-    padding: 3rem;
-    color: var(--ink3);
-    font-size: 14px;
-  }
-  .sno { color: var(--ink3); font-size: 12px; font-variant-numeric: tabular-nums; }
+/* Buttons */
+.btn {
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 8px 16px;
+  border-radius: 7px;
+  cursor: pointer;
+  border: none;
+  transition: all 0.15s;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.btn-primary { background: var(--accent); color: #1A0E06; }
+.btn-primary:hover { background: #F0B88C; }
+.btn-secondary { background: var(--surface2); color: var(--ink); border: 1px solid var(--border2); }
+.btn-secondary:hover { background: #26262A; }
+.btn-danger-sm {
+  background: transparent;
+  color: var(--red);
+  border: 1px solid #3A1515;
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 11px;
+  padding: 4px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.12s;
+}
+.btn-danger-sm:hover { background: var(--red-bg); }
+.btn-edit-sm {
+  background: transparent;
+  color: var(--ink2);
+  border: 1px solid var(--border);
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 11px;
+  padding: 4px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.12s;
+}
+.btn-edit-sm:hover { background: var(--surface2); color: var(--ink); }
 
-  /* Modal */
-  .modal-overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(26,24,20,0.55);
-    z-index: 200;
-    align-items: center;
-    justify-content: center;
-    padding: 1rem;
-  }
-  .modal-overlay.open { display: flex; }
-  .modal {
-    background: var(--surface);
-    border-radius: 12px;
-    border: 1px solid var(--border);
-    padding: 1.8rem;
-    width: 560px;
-    max-width: 100%;
-    max-height: 90vh;
-    overflow-y: auto;
-  }
-  .modal h2 {
-    font-family: 'DM Serif Display', serif;
-    font-size: 1.4rem;
-    margin-bottom: 1.2rem;
-    color: var(--ink);
-  }
-  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-  .form-field { display: flex; flex-direction: column; gap: 5px; }
-  .form-field.full { grid-column: 1/-1; }
-  .form-field label { font-size: 12px; color: var(--ink2); font-weight: 500; }
-  .form-field input, .form-field select {
-    font-family: 'DM Sans', sans-serif;
-    font-size: 13px;
-    padding: 9px 11px;
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    background: var(--bg);
-    color: var(--ink);
-    outline: none;
-    transition: border 0.15s;
-  }
-  .form-field input:focus, .form-field select:focus { border-color: var(--ink3); }
-  .modal-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 1.2rem; }
+/* Stats */
+.stats-row {
+  padding: 1rem 2.5rem;
+  display: flex;
+  gap: 1px;
+  background: var(--border);
+  border-bottom: 1px solid var(--border);
+  overflow-x: auto;
+}
+.stat-box {
+  background: var(--surface);
+  padding: 0.9rem 1.5rem;
+  flex: 1;
+  min-width: 90px;
+  text-align: center;
+}
+.stat-box:first-child { border-radius: 8px 0 0 8px; }
+.stat-box:last-child { border-radius: 0 8px 8px 0; }
+.stat-n {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.7rem;
+  color: var(--ink);
+  line-height: 1;
+}
+.stat-l {
+  font-size: 10px;
+  color: var(--ink3);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-top: 3px;
+}
 
-  /* Toast */
-  .toast {
-    position: fixed;
-    bottom: 2rem; right: 2rem;
-    background: var(--ink);
-    color: #FDFBF7;
-    font-size: 13px;
-    padding: 10px 18px;
-    border-radius: 6px;
-    z-index: 999;
-    opacity: 0;
-    transform: translateY(10px);
-    transition: all 0.25s;
-    pointer-events: none;
-  }
-  .toast.show { opacity: 1; transform: translateY(0); }
+/* Toolbar */
+.toolbar {
+  padding: 0.9rem 2.5rem;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+  border-bottom: 1px solid var(--border);
+}
+.search-box {
+  position: relative;
+  flex: 1;
+  min-width: 160px;
+  max-width: 300px;
+}
+.search-box input {
+  width: 100%;
+  padding: 8px 12px 8px 32px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  color: var(--ink);
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 13px;
+  outline: none;
+  transition: border 0.15s;
+}
+.search-box input:focus { border-color: var(--border2); }
+.search-box input::placeholder { color: var(--ink3); }
+.search-icon {
+  position: absolute;
+  left: 10px; top: 50%;
+  transform: translateY(-50%);
+  color: var(--ink3);
+  font-size: 14px;
+  pointer-events: none;
+}
+.filter-sel {
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 12px;
+  padding: 8px 10px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  color: var(--ink2);
+  outline: none;
+  cursor: pointer;
+}
+.filter-sel option { background: var(--surface2); }
+.sync-status {
+  margin-left: auto;
+  font-size: 11px;
+  color: var(--ink3);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.sync-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); }
 
-  @media (max-width: 700px) {
-    .page-header, .stats-bar, .toolbar, .table-wrap { padding-left: 1.2rem; padding-right: 1.2rem; }
-    .header-title { font-size: 2rem; }
-    .form-grid { grid-template-columns: 1fr; }
-  }
+/* Table */
+.table-wrap {
+  padding: 1.5rem 2.5rem 3rem;
+  overflow-x: auto;
+}
+table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  min-width: 900px;
+  background: var(--surface);
+}
+th {
+  background: var(--surface2);
+  padding: 10px 14px;
+  text-align: left;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--ink3);
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+td {
+  padding: 11px 14px;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+  color: var(--ink);
+  vertical-align: middle;
+}
+tr:last-child td { border-bottom: none; }
+tbody tr { transition: background 0.1s; }
+tbody tr:hover td { background: var(--surface2); }
+.org { font-weight: 500; }
+.dim { color: var(--ink3); font-size: 12px; }
+.pill {
+  display: inline-block;
+  font-size: 10px;
+  padding: 3px 9px;
+  border-radius: 99px;
+  white-space: nowrap;
+  font-weight: 500;
+}
+.p-applied { background: var(--blue-bg); color: var(--blue); border: 1px solid #0D2335; }
+.p-interview { background: var(--amber-bg); color: var(--amber); border: 1px solid #3A2E08; }
+.p-offer { background: var(--green-bg); color: var(--green); border: 1px solid #0F2E1A; }
+.p-rejected { background: var(--red-bg); color: var(--red); border: 1px solid #3A1515; }
+.p-noresponse { background: var(--gray-bg); color: var(--ink2); border: 1px solid var(--border); }
+.p-ghosted { background: var(--gray-bg); color: var(--ink3); border: 1px solid var(--border); }
+.site-tag {
+  font-size: 11px;
+  color: var(--ink3);
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  padding: 2px 8px;
+  border-radius: 99px;
+  white-space: nowrap;
+}
+.act-row { display: flex; gap: 5px; }
+.empty-state {
+  text-align: center;
+  padding: 4rem;
+  color: var(--ink3);
+  font-size: 14px;
+}
+.empty-state p { margin-top: 8px; font-size: 13px; }
+
+/* Modal */
+.overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  z-index: 100;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+.overlay.open { display: flex; }
+.modal {
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  border-radius: 14px;
+  padding: 2rem;
+  width: 560px;
+  max-width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+.modal-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.3rem;
+  margin-bottom: 1.3rem;
+}
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.ff { display: flex; flex-direction: column; gap: 5px; }
+.ff.full { grid-column: 1/-1; }
+.ff label { font-size: 11px; color: var(--ink2); font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase; }
+.ff input, .ff select, .ff textarea {
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 13px;
+  padding: 9px 11px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  color: var(--ink);
+  outline: none;
+  transition: border 0.15s;
+}
+.ff input:focus, .ff select:focus, .ff textarea:focus { border-color: var(--accent); }
+.ff select option { background: var(--surface2); }
+.modal-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 1.2rem; }
+
+/* Sync log */
+.sync-log {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px 14px;
+  font-size: 12px;
+  color: var(--ink2);
+  max-height: 180px;
+  overflow-y: auto;
+  margin-top: 1rem;
+  line-height: 1.8;
+  font-family: monospace;
+  display: none;
+}
+.sync-log.show { display: block; }
+.log-ok { color: var(--green); }
+.log-skip { color: var(--ink3); }
+.log-new { color: var(--accent); }
+
+/* Toast */
+.toast {
+  position: fixed;
+  bottom: 2rem; right: 2rem;
+  background: var(--surface2);
+  border: 1px solid var(--border2);
+  color: var(--ink);
+  font-size: 13px;
+  padding: 10px 18px;
+  border-radius: 8px;
+  z-index: 999;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: all 0.2s;
+  pointer-events: none;
+}
+.toast.show { opacity: 1; transform: translateY(0); }
+
+@media (max-width: 680px) {
+  .app-header, .toolbar, .table-wrap { padding-left: 1rem; padding-right: 1rem; }
+  .stats-row { padding: 0.8rem 1rem; }
+  .form-grid { grid-template-columns: 1fr; }
+  .ff.full { grid-column: 1; }
+}
 </style>
 </head>
 <body>
 
-<div class="page-header">
-  <div class="header-eyebrow">Job Search 2026</div>
-  <div class="header-title">Girika's Applications</div>
-  <div class="header-sub">Tracking every opportunity — synced from Gmail</div>
-  <div class="header-actions">
-    <button class="btn btn-accent" onclick="openAdd()">+ Add Application</button>
-    <button class="btn btn-light" onclick="exportCSV()">↓ Export CSV</button>
+<!-- ══════════════ SETUP SCREEN ══════════════ -->
+<div id="setup-screen">
+  <div class="setup-card">
+    <div class="setup-logo">Job Tracker</div>
+    <div class="setup-sub">Enter your credentials once to set up Gmail sync + AI extraction. Everything stays in your browser — nothing is sent anywhere else.</div>
+
+    <div class="setup-warning">
+      ⚠️ Your API key is stored only in this browser's localStorage. Never share this file with others after entering your key.
+    </div>
+
+    <div class="setup-step">
+      <label>Anthropic API Key</label>
+      <input type="password" id="inp-api-key" placeholder="sk-ant-api03-…">
+      <div class="setup-hint">Get yours at <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a> → API Keys. Used to extract job details from email text.</div>
+    </div>
+
+    <div class="setup-step">
+      <label>Gmail OAuth Client ID</label>
+      <input type="text" id="inp-client-id" placeholder="xxxxxxxx.apps.googleusercontent.com">
+      <div class="setup-hint">
+        Create at <a href="https://console.cloud.google.com" target="_blank">console.cloud.google.com</a> → APIs &amp; Services → Credentials → OAuth 2.0 Client ID (Web Application). Add <strong>this page's URL</strong> as an Authorized JavaScript origin. Enable the Gmail API.
+      </div>
+    </div>
+
+    <button class="btn-setup" onclick="setupSave()">Save &amp; Open Tracker →</button>
   </div>
 </div>
 
-<div class="stats-bar">
-  <div class="stats-group">
-    <div class="stat-item">
-      <div class="stat-num" id="s-total">0</div>
-      <div class="stat-label">Total</div>
+<!-- ══════════════ MAIN APP ══════════════ -->
+<div id="app">
+
+  <div class="app-header">
+    <div>
+      <div class="app-brand">Job Tracker <span>by Girika</span></div>
     </div>
-    <div class="stat-divider"></div>
-    <div class="stat-item">
-      <div class="stat-num" id="s-linkedin">0</div>
-      <div class="stat-label">LinkedIn</div>
-    </div>
-    <div class="stat-divider"></div>
-    <div class="stat-item">
-      <div class="stat-num" id="s-naukri">0</div>
-      <div class="stat-label">Naukri</div>
-    </div>
-    <div class="stat-divider"></div>
-    <div class="stat-item">
-      <div class="stat-num" id="s-interview">0</div>
-      <div class="stat-label">Interviews</div>
-    </div>
-    <div class="stat-divider"></div>
-    <div class="stat-item">
-      <div class="stat-num" id="s-offer">0</div>
-      <div class="stat-label">Offers</div>
+    <div class="header-right">
+      <button class="btn btn-secondary" onclick="exportCSV()">↓ CSV</button>
+      <button class="btn btn-secondary" id="btn-gmail-auth" onclick="gmailAuth()">Connect Gmail</button>
+      <button class="btn btn-secondary" id="btn-sync" onclick="syncGmail()" style="display:none">⟳ Sync Gmail</button>
+      <button class="btn btn-primary" onclick="openAdd()">+ Add</button>
+      <button class="btn btn-secondary" onclick="openSettings()" style="background:var(--accent);color:#1A0E06;font-weight:600;">⚙ Settings / API Keys</button>
     </div>
   </div>
-  <div style="font-size:12px;color:var(--ink3);">Last synced: 28 Mar 2026</div>
-</div>
 
-<div class="toolbar">
-  <div class="search-wrap">
-    <input type="text" id="search-input" placeholder="Search company, role, location…" oninput="renderTable()">
+  <div class="stats-row" id="stats-row">
+    <div class="stat-box"><div class="stat-n" id="s-total">0</div><div class="stat-l">Total</div></div>
+    <div class="stat-box"><div class="stat-n" id="s-linkedin">0</div><div class="stat-l">LinkedIn</div></div>
+    <div class="stat-box"><div class="stat-n" id="s-naukri">0</div><div class="stat-l">Naukri</div></div>
+    <div class="stat-box"><div class="stat-n" id="s-direct">0</div><div class="stat-l">Direct</div></div>
+    <div class="stat-box"><div class="stat-n" id="s-interview">0</div><div class="stat-l">Interviews</div></div>
+    <div class="stat-box"><div class="stat-n" id="s-offer">0</div><div class="stat-l">Offers</div></div>
+    <div class="stat-box"><div class="stat-n" id="s-rejected">0</div><div class="stat-l">Rejected</div></div>
   </div>
-  <select class="filter-select" id="filter-resp" onchange="renderTable()">
-    <option value="">All responses</option>
-    <option>Applied</option>
-    <option>Interview</option>
-    <option>Offer</option>
-    <option>Rejected</option>
-    <option>No response</option>
-    <option>Ghosted</option>
-  </select>
-  <select class="filter-select" id="filter-site" onchange="renderTable()">
-    <option value="">All sites</option>
-    <option>LinkedIn</option>
-    <option>Naukri</option>
-    <option>Company website</option>
-  </select>
+
+  <div class="toolbar">
+    <div class="search-box">
+      <span class="search-icon">⌕</span>
+      <input type="text" id="q" placeholder="Search company, role, location…" oninput="renderTable()">
+    </div>
+    <select class="filter-sel" id="f-resp" onchange="renderTable()">
+      <option value="">All responses</option>
+      <option>Applied</option><option>Interview</option><option>Offer</option>
+      <option>Rejected</option><option>No response</option><option>Ghosted</option>
+    </select>
+    <select class="filter-sel" id="f-site" onchange="renderTable()">
+      <option value="">All sites</option>
+      <option>LinkedIn</option><option>Naukri</option><option>Company website</option>
+    </select>
+    <div class="sync-status" id="sync-status">
+      <div class="sync-dot"></div>
+      <span id="sync-label">Ready</span>
+    </div>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>#</th><th>Organization</th><th>Role</th><th>Location</th>
+          <th>Applied via</th><th>Response</th><th>Salary</th><th>Working days</th><th>Date</th><th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="tbl"></tbody>
+    </table>
+  </div>
 </div>
 
-<div class="table-wrap">
-  <table>
-    <thead>
-      <tr>
-        <th>S.No</th>
-        <th>Organization</th>
-        <th>Role</th>
-        <th>Location</th>
-        <th>Applied via</th>
-        <th>Response</th>
-        <th>Salary</th>
-        <th>Working days</th>
-        <th>Date</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody id="tbl-body"></tbody>
-  </table>
-</div>
-
-<!-- Modal -->
-<div class="modal-overlay" id="modal-overlay" onclick="if(event.target===this)closeModal()">
+<!-- Add/Edit Modal -->
+<div class="overlay" id="modal-overlay" onclick="if(event.target===this)closeModal()">
   <div class="modal">
-    <h2 id="modal-title">Add Application</h2>
+    <div class="modal-title" id="modal-title">Add Application</div>
     <div class="form-grid">
-      <div class="form-field"><label>Organization *</label><input id="f-org" type="text" placeholder="e.g. Google"></div>
-      <div class="form-field"><label>Role *</label><input id="f-role" type="text" placeholder="e.g. Program Manager"></div>
-      <div class="form-field"><label>Location</label><input id="f-loc" type="text" placeholder="e.g. Delhi / Remote"></div>
-      <div class="form-field"><label>Applied via</label><input id="f-site" type="text" placeholder="e.g. LinkedIn, Naukri"></div>
-      <div class="form-field"><label>Response</label>
-        <select id="f-resp">
+      <div class="ff"><label>Organization *</label><input id="m-org" placeholder="e.g. Google"></div>
+      <div class="ff"><label>Role *</label><input id="m-role" placeholder="e.g. Program Manager"></div>
+      <div class="ff"><label>Location</label><input id="m-loc" placeholder="e.g. Delhi / Remote"></div>
+      <div class="ff"><label>Applied via</label><input id="m-site" placeholder="e.g. LinkedIn, Naukri"></div>
+      <div class="ff"><label>Response</label>
+        <select id="m-resp">
           <option>Applied</option><option>Interview</option><option>Offer</option>
           <option>Rejected</option><option>No response</option><option>Ghosted</option>
         </select>
       </div>
-      <div class="form-field"><label>Salary</label><input id="f-sal" type="text" placeholder="e.g. 12 LPA"></div>
-      <div class="form-field"><label>Working days</label><input id="f-days" type="text" placeholder="e.g. 5 days / Mon–Fri"></div>
-      <div class="form-field"><label>Date applied</label><input id="f-date" type="date"></div>
-      <div class="form-field full"><label>Notes</label><input id="f-notes" type="text" placeholder="Any extra info…"></div>
+      <div class="ff"><label>Salary</label><input id="m-sal" placeholder="e.g. 12 LPA"></div>
+      <div class="ff"><label>Working days</label><input id="m-days" placeholder="e.g. Mon–Fri"></div>
+      <div class="ff"><label>Date applied</label><input id="m-date" type="date"></div>
+      <div class="ff full"><label>Notes</label><input id="m-notes" placeholder="Any extra info…"></div>
     </div>
     <div class="modal-actions">
-      <button class="btn-ghost" onclick="closeModal()">Cancel</button>
-      <button class="btn btn-accent" onclick="saveEntry()">Save</button>
+      <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveEntry()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- Settings Modal -->
+<div class="overlay" id="settings-overlay" onclick="if(event.target===this)closeSettings()">
+  <div class="modal" style="max-width:480px;">
+    <div class="modal-title">⚙ Settings</div>
+    <p style="font-size:13px;color:var(--ink2);margin-bottom:1.2rem;line-height:1.6;">Enter your credentials to enable Gmail sync. Stored only in this browser.</p>
+    <div class="ff" style="margin-bottom:12px;">
+      <label>Anthropic API Key</label>
+      <input id="s-api-key" type="password" placeholder="sk-ant-api03-…">
+      <div style="font-size:11px;color:var(--ink3);margin-top:4px;">Get from <a href="https://console.anthropic.com" target="_blank" style="color:var(--accent)">console.anthropic.com</a> → API Keys</div>
+    </div>
+    <div class="ff" style="margin-bottom:12px;">
+      <label>Gmail OAuth Client ID</label>
+      <input id="s-client-id" type="text" placeholder="xxxxxxxx.apps.googleusercontent.com">
+      <div style="font-size:11px;color:var(--ink3);margin-top:4px;">From Google Cloud Console → Credentials → OAuth 2.0 Client ID</div>
+    </div>
+    <div style="background:var(--amber-bg);border:1px solid #3A2E08;border-radius:8px;padding:10px 14px;font-size:12px;color:var(--amber);margin-bottom:1rem;">
+      ⚠️ Make sure <strong>https://girika13.github.io</strong> is added as an Authorized JavaScript origin in your Google Cloud OAuth Client.
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-secondary" onclick="closeSettings()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveSettings()">Save & Enable Sync</button>
+    </div>
+  </div>
+</div>
+
+<!-- Sync Modal -->
+<div class="overlay" id="sync-overlay">
+  <div class="modal" style="max-width:480px;">
+    <div class="modal-title">Syncing Gmail…</div>
+    <div id="sync-progress" style="font-size:13px;color:var(--ink2);line-height:1.8;"></div>
+    <div class="sync-log" id="sync-log"></div>
+    <div class="modal-actions" id="sync-actions" style="display:none;">
+      <button class="btn btn-primary" onclick="closeSyncModal()">Done</button>
     </div>
   </div>
 </div>
 
 <div class="toast" id="toast"></div>
 
+<!-- Google Identity Services -->
+<script src="https://accounts.google.com/gsi/client" async></script>
+
 <script>
-const INITIAL_DATA = [
-  { id:1, org:'ROI - Return On Ideas', role:'Operations Manager', loc:'Hauz Khas, Delhi', site:'LinkedIn', resp:'Applied', sal:'', days:'', date:'2026-03-28', notes:'' },
-  { id:2, org:'Geanis World & MICE', role:'Asst Manager - Contracting & Ops (Domestic MICE)', loc:'New Delhi', site:'LinkedIn', resp:'Applied', sal:'', days:'', date:'2026-03-28', notes:'' },
-  { id:3, org:'Extento Experiences', role:'Production Manager', loc:'Delhi', site:'LinkedIn', resp:'Applied', sal:'', days:'', date:'2026-03-28', notes:'' },
-  { id:4, org:'Apollo Cradle', role:'Operations Manager', loc:'New Delhi (Chirag Enclave)', site:'Naukri', resp:'Applied', sal:'', days:'', date:'2026-03-27', notes:'' },
-  { id:5, org:'Tata Consultancy Services', role:'Project Manager', loc:'Delhi', site:'LinkedIn', resp:'Applied', sal:'', days:'', date:'2026-03-27', notes:'' },
-  { id:6, org:'Maker Lab', role:'Project Manager (Localisation & Events)', loc:'Gurugram', site:'LinkedIn', resp:'Applied', sal:'', days:'', date:'2026-03-27', notes:'' },
-  { id:7, org:'24x7Table', role:'Business Development Manager', loc:'', site:'Company website', resp:'Applied', sal:'', days:'', date:'2026-03-27', notes:'' },
-  { id:8, org:'Cvent', role:'Express Monitoring & Speaker Training Consultant', loc:'Tysons, VA (USA)', site:'Company website', resp:'Applied', sal:'', days:'', date:'2026-03-27', notes:'' },
-  { id:9, org:'AccorHotel', role:'Cluster Learning and Development Manager', loc:'', site:'SmartRecruiters', resp:'Applied', sal:'', days:'', date:'2026-03-27', notes:'' },
-  { id:10, org:'International SOS', role:'Learning & Development (L&D) Specialist', loc:'', site:'Company website', resp:'Applied', sal:'', days:'', date:'2026-03-26', notes:'' },
-  { id:11, org:'CHANEL', role:'Assistant Manager - Fashion Marketing', loc:'Delhi', site:'LinkedIn', resp:'Applied', sal:'', days:'', date:'2026-03-26', notes:'' },
-  { id:12, org:'Inc42 Media', role:'Program Manager - Operations', loc:'', site:'Company website', resp:'Applied', sal:'', days:'', date:'2026-03-26', notes:'' },
-];
-
-const BADGE_CLASS = {
-  'Applied':'b-applied','Interview':'b-interview','Offer':'b-offer',
-  'Rejected':'b-rejected','No response':'b-noresponse','Ghosted':'b-ghosted'
-};
-
+// ──────────────────────────────────────────────
+//  STATE
+// ──────────────────────────────────────────────
 let apps = [];
 let editId = null;
+let gmailToken = null;
+let apiKey = '';
+let clientId = '';
 
-function loadApps() {
-  try {
-    const saved = localStorage.getItem('girika_job_apps');
-    if (saved) {
-      apps = JSON.parse(saved);
-    } else {
-      apps = INITIAL_DATA.map(a => ({...a}));
-      saveApps();
-    }
-  } catch(e) { apps = INITIAL_DATA.map(a => ({...a})); }
-}
+const BADGE = {
+  'Applied':'p-applied','Interview':'p-interview','Offer':'p-offer',
+  'Rejected':'p-rejected','No response':'p-noresponse','Ghosted':'p-ghosted'
+};
 
-function saveApps() {
-  try { localStorage.setItem('girika_job_apps', JSON.stringify(apps)); } catch(e) {}
-}
+const SEED = [
+  {id:1,org:'ROI - Return On Ideas',role:'Operations Manager',loc:'Hauz Khas, Delhi',site:'LinkedIn',resp:'Applied',sal:'',days:'',date:'2026-03-28',notes:''},
+  {id:2,org:'Geanis World & MICE',role:'Asst Manager - Contracting & Ops (Domestic MICE)',loc:'New Delhi',site:'LinkedIn',resp:'Applied',sal:'',days:'',date:'2026-03-28',notes:''},
+  {id:3,org:'Extento Experiences',role:'Production Manager',loc:'Delhi',site:'LinkedIn',resp:'Applied',sal:'',days:'',date:'2026-03-28',notes:''},
+  {id:4,org:'Apollo Cradle',role:'Operations Manager',loc:'New Delhi (Chirag Enclave)',site:'Naukri',resp:'Applied',sal:'',days:'',date:'2026-03-27',notes:''},
+  {id:5,org:'Tata Consultancy Services',role:'Project Manager',loc:'Delhi',site:'LinkedIn',resp:'Applied',sal:'',days:'',date:'2026-03-27',notes:''},
+  {id:6,org:'Maker Lab',role:'Project Manager (Localisation & Events)',loc:'Gurugram',site:'LinkedIn',resp:'Applied',sal:'',days:'',date:'2026-03-27',notes:''},
+  {id:7,org:'24x7Table',role:'Business Development Manager',loc:'',site:'Company website',resp:'Applied',sal:'',days:'',date:'2026-03-27',notes:''},
+  {id:8,org:'Cvent',role:'Express Monitoring & Speaker Training Consultant',loc:'Tysons, VA (USA)',site:'Company website',resp:'Applied',sal:'',days:'',date:'2026-03-27',notes:''},
+  {id:9,org:'AccorHotel',role:'Cluster Learning and Development Manager',loc:'',site:'SmartRecruiters',resp:'Applied',sal:'',days:'',date:'2026-03-27',notes:''},
+  {id:10,org:'International SOS',role:'Learning & Development (L&D) Specialist',loc:'',site:'Company website',resp:'Applied',sal:'',days:'',date:'2026-03-26',notes:''},
+  {id:11,org:'CHANEL',role:'Assistant Manager - Fashion Marketing',loc:'Delhi',site:'LinkedIn',resp:'Applied',sal:'',days:'',date:'2026-03-26',notes:''},
+  {id:12,org:'Inc42 Media',role:'Program Manager - Operations',loc:'',site:'Company website',resp:'Applied',sal:'',days:'',date:'2026-03-26',notes:''},
+];
 
-function renderStats() {
-  document.getElementById('s-total').textContent = apps.length;
-  document.getElementById('s-linkedin').textContent = apps.filter(a => a.site && a.site.toLowerCase().includes('linkedin')).length;
-  document.getElementById('s-naukri').textContent = apps.filter(a => a.site && a.site.toLowerCase().includes('naukri')).length;
-  document.getElementById('s-interview').textContent = apps.filter(a => a.resp === 'Interview').length;
-  document.getElementById('s-offer').textContent = apps.filter(a => a.resp === 'Offer').length;
-}
+// ──────────────────────────────────────────────
+//  INIT
+// ──────────────────────────────────────────────
+function init() {
+  apiKey    = localStorage.getItem('jt_api_key') || '';
+  clientId  = localStorage.getItem('jt_client_id') || '';
+  const raw = localStorage.getItem('jt_apps');
+  apps = raw ? JSON.parse(raw) : SEED.map(a=>({...a}));
+  if (!raw) persist();
 
-function renderTable() {
-  const q = document.getElementById('search-input').value.toLowerCase();
-  const filterResp = document.getElementById('filter-resp').value;
-  const filterSite = document.getElementById('filter-site').value;
-
-  let filtered = [...apps].sort((a,b) => (b.date||'').localeCompare(a.date||''));
-
-  if (q) filtered = filtered.filter(a =>
-    [a.org, a.role, a.loc, a.site, a.notes].some(f => (f||'').toLowerCase().includes(q))
-  );
-  if (filterResp) filtered = filtered.filter(a => a.resp === filterResp);
-  if (filterSite) filtered = filtered.filter(a => (a.site||'').toLowerCase().includes(filterSite.toLowerCase()));
-
-  const tbody = document.getElementById('tbl-body');
-  if (!filtered.length) {
-    tbody.innerHTML = '<tr><td colspan="10" class="no-results">No applications match your filters.</td></tr>';
-    return;
+  if (!apiKey || !clientId) {
+    document.getElementById('setup-screen').style.display = 'flex';
+    document.getElementById('app').style.display = 'none';
+  } else {
+    showApp();
   }
+}
 
-  tbody.innerHTML = filtered.map((a, i) => `
-    <tr>
-      <td class="sno">${i+1}</td>
-      <td class="org-name">${esc(a.org)}</td>
-      <td>${esc(a.role)}</td>
-      <td class="${a.loc ? '' : 'muted'}">${esc(a.loc || '—')}</td>
-      <td><span class="site-pill">${esc(a.site || '—')}</span></td>
-      <td><span class="badge ${BADGE_CLASS[a.resp] || 'b-applied'}">${esc(a.resp)}</span></td>
-      <td class="${a.sal ? '' : 'muted'}">${esc(a.sal || '—')}</td>
-      <td class="${a.days ? '' : 'muted'}">${esc(a.days || '—')}</td>
-      <td class="muted">${formatDate(a.date)}</td>
-      <td>
-        <div class="row-actions">
-          <button class="btn-ghost" onclick="openEdit(${a.id})">Edit</button>
-          <button class="btn-danger" onclick="deleteEntry(${a.id})">Delete</button>
-        </div>
-      </td>
-    </tr>
-  `).join('');
+function setupSave() {
+  const k = document.getElementById('inp-api-key').value.trim();
+  const c = document.getElementById('inp-client-id').value.trim();
+  if (!k || !c) { alert('Please fill in both fields.'); return; }
+  localStorage.setItem('jt_api_key', k);
+  localStorage.setItem('jt_client_id', c);
+  apiKey = k; clientId = c;
+  showApp();
+}
 
+function showApp() {
+  document.getElementById('setup-screen').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+  renderTable();
+}
+
+function openSettings() {
+  document.getElementById('s-api-key').value = apiKey || '';
+  document.getElementById('s-client-id').value = clientId || '';
+  document.getElementById('settings-overlay').classList.add('open');
+}
+function closeSettings() {
+  document.getElementById('settings-overlay').classList.remove('open');
+}
+function saveSettings() {
+  const k = document.getElementById('s-api-key').value.trim();
+  const c = document.getElementById('s-client-id').value.trim();
+  if (!k || !c) { alert('Please fill in both fields.'); return; }
+  localStorage.setItem('jt_api_key', k);
+  localStorage.setItem('jt_client_id', c);
+  apiKey = k; clientId = c;
+  closeSettings();
+  toast('Settings saved ✓ — now click Connect Gmail');
+}
+
+function resetSetup() { openSettings(); }
+
+// ──────────────────────────────────────────────
+//  PERSIST
+// ──────────────────────────────────────────────
+function persist() {
+  localStorage.setItem('jt_apps', JSON.stringify(apps));
+}
+
+// ──────────────────────────────────────────────
+//  RENDER
+// ──────────────────────────────────────────────
+function renderTable() {
+  const q = (document.getElementById('q').value||'').toLowerCase();
+  const fr = document.getElementById('f-resp').value;
+  const fs = document.getElementById('f-site').value;
+
+  let rows = [...apps].sort((a,b)=>(b.date||'').localeCompare(a.date||''));
+  if (q) rows = rows.filter(a=>[a.org,a.role,a.loc,a.site,a.notes].some(f=>(f||'').toLowerCase().includes(q)));
+  if (fr) rows = rows.filter(a=>a.resp===fr);
+  if (fs) rows = rows.filter(a=>(a.site||'').toLowerCase().includes(fs.toLowerCase()));
+
+  const tbody = document.getElementById('tbl');
+  if (!rows.length) {
+    tbody.innerHTML = `<tr><td colspan="10" class="empty-state">No results found.<p>Try clearing the filters or add a new application.</p></td></tr>`;
+  } else {
+    tbody.innerHTML = rows.map((a,i)=>`
+      <tr>
+        <td class="dim">${i+1}</td>
+        <td class="org">${esc(a.org)}</td>
+        <td>${esc(a.role)}</td>
+        <td class="${a.loc?'':'dim'}">${esc(a.loc||'—')}</td>
+        <td><span class="site-tag">${esc(a.site||'—')}</span></td>
+        <td><span class="pill ${BADGE[a.resp]||'p-applied'}">${esc(a.resp)}</span></td>
+        <td class="${a.sal?'':'dim'}">${esc(a.sal||'—')}</td>
+        <td class="${a.days?'':'dim'}">${esc(a.days||'—')}</td>
+        <td class="dim">${fmtDate(a.date)}</td>
+        <td><div class="act-row">
+          <button class="btn-edit-sm" onclick="openEdit(${a.id})">Edit</button>
+          <button class="btn-danger-sm" onclick="delEntry(${a.id})">Del</button>
+        </div></td>
+      </tr>`).join('');
+  }
   renderStats();
 }
 
-function formatDate(d) {
+function renderStats() {
+  document.getElementById('s-total').textContent     = apps.length;
+  document.getElementById('s-linkedin').textContent  = apps.filter(a=>(a.site||'').toLowerCase().includes('linkedin')).length;
+  document.getElementById('s-naukri').textContent    = apps.filter(a=>(a.site||'').toLowerCase().includes('naukri')).length;
+  document.getElementById('s-direct').textContent    = apps.filter(a=>(a.site||'').toLowerCase().includes('website')||((a.site||'').toLowerCase().includes('direct'))).length;
+  document.getElementById('s-interview').textContent = apps.filter(a=>a.resp==='Interview').length;
+  document.getElementById('s-offer').textContent     = apps.filter(a=>a.resp==='Offer').length;
+  document.getElementById('s-rejected').textContent  = apps.filter(a=>a.resp==='Rejected').length;
+}
+
+function fmtDate(d) {
   if (!d) return '—';
-  try {
-    const dt = new Date(d + 'T00:00:00');
-    return dt.toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' });
-  } catch(e) { return d; }
+  try { return new Date(d+'T00:00:00').toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'}); }
+  catch(e){ return d; }
 }
+function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
-function esc(s) {
-  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-
+// ──────────────────────────────────────────────
+//  ADD / EDIT / DELETE
+// ──────────────────────────────────────────────
 function openAdd() {
   editId = null;
   document.getElementById('modal-title').textContent = 'Add Application';
-  ['org','role','loc','site','sal','days','notes'].forEach(f => document.getElementById('f-'+f).value = '');
-  document.getElementById('f-resp').value = 'Applied';
-  document.getElementById('f-date').value = new Date().toISOString().slice(0,10);
+  ['m-org','m-role','m-loc','m-site','m-sal','m-days','m-notes'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('m-resp').value = 'Applied';
+  document.getElementById('m-date').value = new Date().toISOString().slice(0,10);
   document.getElementById('modal-overlay').classList.add('open');
 }
 
 function openEdit(id) {
-  const a = apps.find(x => x.id === id);
-  if (!a) return;
+  const a = apps.find(x=>x.id===id); if(!a) return;
   editId = id;
   document.getElementById('modal-title').textContent = 'Edit Application';
-  document.getElementById('f-org').value = a.org || '';
-  document.getElementById('f-role').value = a.role || '';
-  document.getElementById('f-loc').value = a.loc || '';
-  document.getElementById('f-site').value = a.site || '';
-  document.getElementById('f-resp').value = a.resp || 'Applied';
-  document.getElementById('f-sal').value = a.sal || '';
-  document.getElementById('f-days').value = a.days || '';
-  document.getElementById('f-date').value = a.date || '';
-  document.getElementById('f-notes').value = a.notes || '';
+  document.getElementById('m-org').value   = a.org||'';
+  document.getElementById('m-role').value  = a.role||'';
+  document.getElementById('m-loc').value   = a.loc||'';
+  document.getElementById('m-site').value  = a.site||'';
+  document.getElementById('m-resp').value  = a.resp||'Applied';
+  document.getElementById('m-sal').value   = a.sal||'';
+  document.getElementById('m-days').value  = a.days||'';
+  document.getElementById('m-date').value  = a.date||'';
+  document.getElementById('m-notes').value = a.notes||'';
   document.getElementById('modal-overlay').classList.add('open');
 }
 
-function closeModal() {
-  document.getElementById('modal-overlay').classList.remove('open');
-}
+function closeModal() { document.getElementById('modal-overlay').classList.remove('open'); }
 
 function saveEntry() {
-  const org = document.getElementById('f-org').value.trim();
-  const role = document.getElementById('f-role').value.trim();
-  if (!org || !role) { alert('Organization and Role are required.'); return; }
+  const org = document.getElementById('m-org').value.trim();
+  const role = document.getElementById('m-role').value.trim();
+  if (!org||!role) { alert('Organization and Role are required.'); return; }
   const entry = {
-    id: editId || Date.now(),
-    org, role,
-    loc: document.getElementById('f-loc').value.trim(),
-    site: document.getElementById('f-site').value.trim(),
-    resp: document.getElementById('f-resp').value,
-    sal: document.getElementById('f-sal').value.trim(),
-    days: document.getElementById('f-days').value.trim(),
-    date: document.getElementById('f-date').value,
-    notes: document.getElementById('f-notes').value.trim()
+    id: editId||Date.now(), org, role,
+    loc:   document.getElementById('m-loc').value.trim(),
+    site:  document.getElementById('m-site').value.trim(),
+    resp:  document.getElementById('m-resp').value,
+    sal:   document.getElementById('m-sal').value.trim(),
+    days:  document.getElementById('m-days').value.trim(),
+    date:  document.getElementById('m-date').value,
+    notes: document.getElementById('m-notes').value.trim()
   };
   if (editId) {
-    apps = apps.map(a => a.id === editId ? entry : a);
-    showToast('Entry updated');
+    apps = apps.map(a=>a.id===editId?entry:a);
+    toast('Entry updated ✓');
   } else {
     apps.push(entry);
-    showToast('Application added');
+    toast('Application added ✓');
   }
-  saveApps();
-  renderTable();
-  closeModal();
+  persist(); renderTable(); closeModal();
 }
 
-function deleteEntry(id) {
+function delEntry(id) {
   if (!confirm('Delete this application?')) return;
-  apps = apps.filter(a => a.id !== id);
-  saveApps();
-  renderTable();
-  showToast('Deleted');
+  apps = apps.filter(a=>a.id!==id);
+  persist(); renderTable();
+  toast('Deleted');
 }
 
+// ──────────────────────────────────────────────
+//  GMAIL OAUTH
+// ──────────────────────────────────────────────
+function gmailAuth() {
+  if (!clientId) { alert('No Client ID found. Check settings.'); return; }
+  const client = google.accounts.oauth2.initTokenClient({
+    client_id: clientId,
+    scope: 'https://www.googleapis.com/auth/gmail.readonly',
+    callback: (resp) => {
+      if (resp.error) { alert('Gmail auth failed: ' + resp.error); return; }
+      gmailToken = resp.access_token;
+      document.getElementById('btn-gmail-auth').textContent = '✓ Gmail Connected';
+      document.getElementById('btn-gmail-auth').style.color = 'var(--green)';
+      document.getElementById('btn-sync').style.display = 'inline-flex';
+      toast('Gmail connected ✓');
+    }
+  });
+  client.requestAccessToken();
+}
+
+// ──────────────────────────────────────────────
+//  GMAIL SYNC
+// ──────────────────────────────────────────────
+async function syncGmail() {
+  if (!gmailToken) { alert('Please connect Gmail first.'); return; }
+
+  // Show sync modal
+  document.getElementById('sync-overlay').classList.add('open');
+  document.getElementById('sync-actions').style.display = 'none';
+  const prog = document.getElementById('sync-progress');
+  const log  = document.getElementById('sync-log');
+  log.innerHTML = ''; log.classList.add('show');
+  prog.textContent = 'Searching Gmail for application confirmation emails…';
+
+  try {
+    // 1. Search Gmail
+    const since = getLastSyncDate();
+    const query = `after:${since} (subject:(applied OR "application received" OR "application submitted" OR "thank you for applying" OR "your application") OR from:(naukri.com OR linkedin.com OR smartrecruiters.com OR icims.com OR greenhouse.io OR lever.co OR workday.com OR taleo.net))`;
+
+    const searchRes = await gmailFetch(`https://gmail.googleapis.com/gmail/v1/users/me/messages?maxResults=50&q=${encodeURIComponent(query)}`);
+    const messages = searchRes.messages || [];
+
+    if (!messages.length) {
+      prog.textContent = 'No new application emails found since last sync.';
+      document.getElementById('sync-actions').style.display = 'flex';
+      return;
+    }
+
+    prog.textContent = `Found ${messages.length} emails. Extracting job details with AI…`;
+    appendLog(`Found ${messages.length} candidate emails`, 'ok');
+
+    let added = 0;
+    const emailTexts = [];
+
+    // 2. Read each email
+    for (const msg of messages.slice(0, 30)) {
+      const full = await gmailFetch(`https://gmail.googleapis.com/gmail/v1/users/me/messages/${msg.id}?format=full`);
+      const subj = getHeader(full, 'Subject');
+      const from = getHeader(full, 'From');
+      const body = extractBody(full);
+      const date = getHeader(full, 'Date');
+
+      // Quick filter — skip obvious non-application emails
+      const combined = (subj + ' ' + body).toLowerCase();
+      const isApp = ['applied','application','thank you for applying','your application','we received'].some(k => combined.includes(k));
+      if (!isApp) { appendLog(`Skip: ${subj.slice(0,60)}`, 'skip'); continue; }
+
+      emailTexts.push({ subj, from, body: body.slice(0, 1200), date });
+      appendLog(`Reading: ${subj.slice(0,60)}`, 'ok');
+    }
+
+    if (!emailTexts.length) {
+      prog.textContent = 'No valid application emails detected.';
+      document.getElementById('sync-actions').style.display = 'flex';
+      return;
+    }
+
+    prog.textContent = `Extracting details from ${emailTexts.length} emails using Claude AI…`;
+
+    // 3. Send batch to Claude for extraction
+    const prompt = `You are extracting job application details from confirmation emails. For each email below, extract:
+- org (company/organization name)
+- role (job title/position)
+- loc (location, city or country, empty string if not found)
+- site (where they applied: "LinkedIn", "Naukri", "Company website", or the ATS name like "SmartRecruiters", "Greenhouse", etc.)
+- date (YYYY-MM-DD format, from the email date)
+
+Return ONLY a JSON array. No markdown. No explanation. Example:
+[{"org":"Google","role":"Program Manager","loc":"Bangalore","site":"LinkedIn","date":"2026-03-27"}]
+
+Emails:
+${emailTexts.map((e,i)=>`--- Email ${i+1} ---\nSubject: ${e.subj}\nFrom: ${e.from}\nDate: ${e.date}\nBody: ${e.body}`).join('\n\n')}`;
+
+    const claudeRes = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 2000,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+
+    const claudeData = await claudeRes.json();
+    const text = claudeData.content?.[0]?.text || '[]';
+    let extracted = [];
+    try {
+      const clean = text.replace(/```json|```/g,'').trim();
+      extracted = JSON.parse(clean);
+    } catch(e) {
+      appendLog('AI parse error — could not read response', 'skip');
+    }
+
+    // 4. Merge into apps (no duplicates)
+    for (const e of extracted) {
+      const dup = apps.find(a => a.org.toLowerCase()===e.org.toLowerCase() && a.role.toLowerCase()===e.role.toLowerCase());
+      if (dup) { appendLog(`Already exists: ${e.org} — ${e.role}`, 'skip'); continue; }
+      apps.push({ id: Date.now()+Math.random(), org:e.org, role:e.role, loc:e.loc||'', site:e.site||'', resp:'Applied', sal:'', days:'', date:e.date||'', notes:'' });
+      appendLog(`✦ Added: ${e.org} — ${e.role}`, 'new');
+      added++;
+    }
+
+    persist();
+    renderTable();
+    localStorage.setItem('jt_last_sync', new Date().toISOString().slice(0,10).replace(/-/g,'/'));
+    document.getElementById('sync-label').textContent = `Synced · ${new Date().toLocaleDateString('en-IN',{day:'numeric',month:'short'})}`;
+    prog.textContent = `Done! ${added} new application${added!==1?'s':''} added.`;
+
+  } catch(err) {
+    document.getElementById('sync-progress').textContent = 'Error: ' + err.message;
+    appendLog('Error: ' + err.message, 'skip');
+  }
+
+  document.getElementById('sync-actions').style.display = 'flex';
+}
+
+function closeSyncModal() {
+  document.getElementById('sync-overlay').classList.remove('open');
+}
+
+function getLastSyncDate() {
+  const last = localStorage.getItem('jt_last_sync');
+  if (last) return last.replace(/-/g, '/');
+  // Default: 7 days ago
+  const d = new Date(); d.setDate(d.getDate()-7);
+  return d.toISOString().slice(0,10).replace(/-/g,'/');
+}
+
+async function gmailFetch(url) {
+  const res = await fetch(url, {
+    headers: { Authorization: 'Bearer ' + gmailToken }
+  });
+  if (!res.ok) throw new Error(`Gmail API error: ${res.status}`);
+  return res.json();
+}
+
+function getHeader(msg, name) {
+  const h = (msg.payload?.headers||[]).find(h=>h.name.toLowerCase()===name.toLowerCase());
+  return h ? h.value : '';
+}
+
+function extractBody(msg) {
+  function decode(str) {
+    try { return atob(str.replace(/-/g,'+').replace(/_/g,'/')); } catch(e){ return ''; }
+  }
+  function walk(part) {
+    if (!part) return '';
+    if (part.mimeType === 'text/plain' && part.body?.data) return decode(part.body.data);
+    if (part.parts) { for (const p of part.parts) { const t = walk(p); if(t) return t; } }
+    return '';
+  }
+  let text = walk(msg.payload) || decode(msg.payload?.body?.data||'');
+  return text.replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim();
+}
+
+function appendLog(msg, type) {
+  const log = document.getElementById('sync-log');
+  const div = document.createElement('div');
+  div.className = type==='ok'?'log-ok':type==='new'?'log-new':'log-skip';
+  div.textContent = msg;
+  log.appendChild(div);
+  log.scrollTop = log.scrollHeight;
+}
+
+// ──────────────────────────────────────────────
+//  EXPORT
+// ──────────────────────────────────────────────
 function exportCSV() {
   const headers = ['S.No','Organization','Role','Location','Applied via','Response','Salary','Working days','Date','Notes'];
-  const rows = [...apps].sort((a,b) => (b.date||'').localeCompare(a.date||'')).map((a,i) => [
-    i+1, a.org, a.role, a.loc, a.site, a.resp, a.sal, a.days, a.date, a.notes
-  ].map(v => `"${String(v||'').replace(/"/g,'""')}"`).join(','));
-  const csv = [headers.join(','), ...rows].join('\n');
-  const blob = new Blob([csv], { type: 'text/csv' });
+  const rows = [...apps].sort((a,b)=>(b.date||'').localeCompare(a.date||'')).map((a,i)=>[
+    i+1,a.org,a.role,a.loc,a.site,a.resp,a.sal,a.days,a.date,a.notes
+  ].map(v=>`"${String(v||'').replace(/"/g,'""')}"`).join(','));
+  const csv = [headers.join(','),...rows].join('\n');
+  const blob = new Blob([csv],{type:'text/csv'});
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
-  a.href = url; a.download = 'job_applications.csv';
-  a.click(); URL.revokeObjectURL(url);
-  showToast('CSV downloaded');
+  a.href=url; a.download='job_applications.csv'; a.click();
+  URL.revokeObjectURL(url);
+  toast('CSV downloaded');
 }
 
-function showToast(msg) {
+// ──────────────────────────────────────────────
+//  TOAST
+// ──────────────────────────────────────────────
+function toast(msg) {
   const t = document.getElementById('toast');
   t.textContent = msg;
   t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2200);
+  setTimeout(()=>t.classList.remove('show'), 2200);
 }
 
-loadApps();
-renderTable();
+init();
 </script>
 </body>
 </html>
